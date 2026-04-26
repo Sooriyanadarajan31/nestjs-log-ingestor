@@ -2,13 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateLogDto } from './dto/create-log.dto';
-
+import { Logger } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 @Injectable()
 export class LogService {
+    private logger = new Logger('LogsService');
     constructor(@InjectModel('Log') private logModel: Model<any>) { }
 
     async create(log: CreateLogDto) {
-        return this.logModel.create(log);
+        try {
+            return await this.logModel.create(log);
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to create log');
+        }
     }
 
     async seed() {
@@ -39,6 +45,6 @@ export class LogService {
             },
         ]);
 
-        console.log('✅ Seed data inserted');
+        this.logger.log('Seed data inserted');
     }
 }

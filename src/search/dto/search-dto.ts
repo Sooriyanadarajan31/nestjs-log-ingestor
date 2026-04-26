@@ -10,6 +10,14 @@ export class SearchQueryDto {
     @IsOptional()
     regex?: string;
 
+    @ApiPropertyOptional({ example: 1 })
+    @IsOptional()
+    page?: number;
+
+    @ApiPropertyOptional({ example: 10 })
+    @IsOptional()
+    limit?: number;
+
     @ApiPropertyOptional({ example: 'error' })
     @IsOptional()
     @IsString()

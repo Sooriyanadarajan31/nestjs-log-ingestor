@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SearchQueryDto } from './dto/search-dto';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class SearchService {
@@ -21,14 +22,14 @@ export class SearchService {
         }
 
         if (query.message) {
-            filter.$text = { $search: query.message };
-        }
-
-        if (query.message) {
             if (query.regex === 'true') {
-                filter.message = { $regex: query.message, $options: 'i' };
+                try {
+                    filter.message = { $regex: new RegExp(query.message, 'i') };
+                } catch {
+                    throw new BadRequestException('Invalid regex pattern');
+                }
             } else {
-                filter.$text = { $search: query.message };
+                filter.message = { $regex: query.message, $options: 'i' };
             }
         }
 
@@ -40,6 +41,13 @@ export class SearchService {
             };
         }
 
-        return this.logModel.find(filter).sort({ timestamp: -1 }).limit(100);
+        const page = Number(query.page) || 1;
+        const limit = Number(query.limit) || 10;
+
+        return this.logModel
+            .find(filter)
+            .sort({ timestamp: -1 }) // ✅ latest first
+            .skip((page - 1) * limit)
+            .limit(limit);
     }
 }

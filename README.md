@@ -104,6 +104,8 @@ Supports filtering and full-text search.
 /search?resourceId=server-1234
 /search?start=2023-09-10&end=2023-09-20
 /search?message=connect&regex=true
+### Pagination
+/search?page=1&limit=10
 ```
 
 ---

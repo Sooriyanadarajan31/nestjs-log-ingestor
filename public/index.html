@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Log Search UI</title>
+</head>
+<body>
+  <h2>🔍 Log Search</h2>
+
+  <input id="message" placeholder="Search message" />
+  <input id="level" placeholder="Level (error, info)" />
+  <button onclick="search()">Search</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function search() {
+      const message = document.getElementById('message').value;
+      const level = document.getElementById('level').value;
+
+      const res = await fetch(
+        `http://localhost:3000/search?message=${message}&level=${level}`,
+        {
+          headers: {
+            role: 'admin' 
+          }
+        }
+      );
+
+      const data = await res.json();
+      document.getElementById('result').innerText =
+        JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>

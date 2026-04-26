@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateLogDto } from './dto/create-log.dto';
 
 @Injectable()
 export class LogService {
     constructor(@InjectModel('Log') private logModel: Model<any>) { }
 
-    async create(log: any) {
+    async create(log: CreateLogDto) {
         return this.logModel.create(log);
     }
 
-    // 🔥 Seed data
     async seed() {
         const count = await this.logModel.countDocuments();
 

@@ -35,7 +35,7 @@ npm install
 ### 2. Run the application (Recommended)
 
 ```bash
-npm run start:dev
+npm run start
 ```
 
 👉 This will:

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { SearchController } from './search.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { LogSchema } from '../logs/logs.schema';
+import { LogSchema } from '../log/schemas/createlog.schema';
 
 @Module({
   imports: [

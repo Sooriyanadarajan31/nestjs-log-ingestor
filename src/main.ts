@@ -1,15 +1,15 @@
-import { NestFactory } from '@nestjs/core';
+import * as dotenv from 'dotenv';
+dotenv.config(); import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { LogsService } from './logs/logs.service';
+import { LogService } from './log/log.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // ✅ Serve static UI
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
   app.useGlobalPipes(
@@ -31,7 +31,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();
-  const logsService = app.get(LogsService);
+  const logsService = app.get(LogService);
 
   if (process.env.SEED === 'true') {
     await logsService.seed();
